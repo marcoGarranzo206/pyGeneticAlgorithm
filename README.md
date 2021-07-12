@@ -38,6 +38,8 @@ from string import ascii_lowercase
 universe = list(ascii_lowercase) + " "
 ```
 
+Our genetic algorithm will now randomly initialize a number of individuals, say, a 100. They will probably be very far off from the target string, but due to chance, some will be better than others, as judged by out fitness score.
+
 
 
 # Todo: explain continuous GA
