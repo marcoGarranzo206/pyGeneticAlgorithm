@@ -10,12 +10,17 @@ Genetic algorithms randomly search solutions to a given optimization problem dra
 
 The first thing you will need is to define a function to optimize, the so called fitness function.
 
-Imagine you want an algorithm to guess a string, such as "genetic algorithms rock". Imagine that the algorithm knows the length of the string (23 characters), and all it has to do is search for which characters to put in each position. Given a string S, we can judge how close this string is to our target string (and therefore judge the *fitness* of it) using a hamming similarity:
+Imagine you want an algorithm to guess a string, such as "genetic algorithms rock". A pretty contrived example, taken from XXX, but I think is very intuitive. Later we will use GA for more useful problems such as feature selection in machine learning and community detection in networks. 
+
+Anyways, imagine that the algorithm knows the length of the string (23 characters), and all it has to do is search for which characters to put in each position. Given a string S, we can judge how close this string is to our target string (and therefore judge the *fitness* of it) using a hamming similarity:
 
 ```python
 def hamming_similarity(S1, S2):
     
     return sum([ s1 == s2 for (s1,s2) in zip(S1,S2) ])
+    
+hs = hamming_similarity(hello, helpo)
+print(hs)
 ```
 
 What this function does essentially is count the number of characters that two strings, S1 and S2, have in common
