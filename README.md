@@ -18,12 +18,19 @@ Anyways, imagine that the algorithm knows the length of the string (23 character
 def hamming_similarity(S1, S2):
     
     return sum([ s1 == s2 for (s1,s2) in zip(S1,S2) ])
-    
-hs = hamming_similarity(hello, helpo)
-print(hs)
 ```
 
-What this function does essentially is count the number of characters that two strings, S1 and S2, have in common
+What this function does is count the number of characters that two strings, S1 and S2, have in common. The max value it can take is the length of both strings.
+If we want a GA to guess the string "genetic algorithms rock", we fix S1 to be that string, and let S2 be candidate solution S:
+
+```python
+stringToFind = "genetic algorithms rock"
+
+def fitness(S):
+    
+    return sum([ s1 == s2 for (s1,s2) in zip(stringToFind,S) ])
+```
+
 
 # Todo: explain continuous GA
 # Todo: Use cases
