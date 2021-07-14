@@ -22,19 +22,19 @@ def fitness(S):
     return sum([ s1 == s2 for (s1,s2) in zip(stringToFind,S) ])
 ```
 
-What this function does is count the number of characters that two strings, S and stringToFind, have in common. The max value it can take is the length of the strings.
+What this function does is count the number of characters that two strings, S and stringToFind, have in common. The max value it can take is the length of the strings. 
 
 
-We define a candidate solution (here called _S_) for any fitness function as an individual, which is nothing more than an n-dimensional array, where n is the number of decision  variables. Here n is 23, with n[0] being the value of the first letter and so on. 
+We define a candidate solution (here called _S_) for any fitness function as an individual, which is nothing more than an n-dimensional array, where n is the number of decision  variables. Here n is 23, with n[0] being the value of the first letter and so on. **not very clear**
 
-In the case of discrete GA such as this one, decision variables can take on any number of discrete possible values. In principle any variable could have a different set of possible values, but here each variable will be able to take the same values: all ascii lowercase letters and a space. We define the universe as the values each decision variable can take
+In the case of discrete GA such as this one, decision variables can take on any number of discrete possible values. In principle any variable could have a different set of possible values. In this example each variable will be able to take on the same values: all ascii lowercase letters and a space. We define the universe as the values each decision variable can take.
 
 ```python
 from string import ascii_lowercase
 universe = list(ascii_lowercase) + " "
 ```
 
-Our genetic algorithm will now randomly initialize a number of individuals, say, a 100. We will evaluate each individualś fitness, which can be done in parallel. They will probably be very far off from the target string, but due to chance, some will be better than others, as judged by out fitness score.
+Our genetic algorithm will now randomly initialize a number of individuals, say, a 100. We will evaluate each individual's fitness, which could be done in parallel. They will probably be very far off from the target string, but due to chance, some will be better than others, as judged by out fitness score.
 
 ```python
 import numpy as np
@@ -49,7 +49,7 @@ Next step comes the selection. Here, we choose which of our individuals are pick
 ```python
 prob = fitness/np.sum(pop_fitness)
 p1,p2 = np.random.choice(a = len(pop), p = prob), np.random.choice(a = len(self.pop), p = prob)
-crossover(self.pop[p1],self.pop[p2])
+crossover(pop[p1],pop[p2])
 ```
 
 The crossover function governs how a new individual (candidate solution) is generated. There are two methods:
