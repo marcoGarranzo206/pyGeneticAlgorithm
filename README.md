@@ -3,6 +3,28 @@ Genetic algorithms (GA) for discrete and continuous functions in python
 
 In this repository I implement genetic algorithms in python and provide a few use cases. Any suggestions for improving the algorithm or optimizating the procedure or ideas for use cases are appreciated. At the moment it is just a side project but I am always looking to improve my work.
 
+# Usage
+
+The user needs to define a fitness function to maximize which has to be positve valued. Next, depending on the nature of the decision variables, discrete or continuous, choose the appropriate solver. If a continuous fitness function can be numbafied then the user has the ability to use the continuous numbafied solver. 
+
+For discrete variables one can choose:
+
+p:probability of mutation
+pop: population size
+universe_type: "equal" or "specific" depending on whether each variable can take on the same values or each variable can take on different values
+universe: a 1d array or list of possible values each variable can take if universe is equal or a list of lists if specific. In the latter case, there must be as many lists as variables, each list indicating the values each variable can take
+crossover: midpoint or crossover
+parent contribution: which % of attributes to take from one parent
+
+Then, using the solve method, run the algorithm for n_iters of iterations.
+
+For continuous variables one can choose:
+
+p:probability of mutation
+pop: population size
+ub: vector of upper bounds for each variable. Size is the number of variables.
+lb: vector of lower bounds for each variable. Size is the number of variables.
+
 
 # Discrete GA
 
@@ -56,8 +78,8 @@ The crossover function governs how a new individual (candidate solution) is gene
 
 Midpoint:
 
-    The first half of the new invidual contains the values of one parent, the next half of the other
-    Instead of 50/50 we could establish any proportion we want:
+The first half of the new invidual contains the values of one parent, the next half of the other
+Instead of 50/50 we could establish any proportion we want:
     
 ```python    
 child = [0 for _ in range(23)]
@@ -70,7 +92,7 @@ crossover(self.pop[p1],self.pop[p2])
     
 Crossover:
 
-    Here, each variable has a probability _proportion_ to come from one parent or the other
+Here, each variable has a probability _proportion_ to come from one parent or the other
 ```python    
 proportion = 0.5
 child = [0 for _ in range(23)]
@@ -78,7 +100,8 @@ helper_parent = [p1,p2]
 for i in range(23):
 
     child[i] = helper_parent[np.random.choice(a = 2, p = [proportion, 1 - proportion])][i] 
-    ```
+ ```
+ 
 This process is repeated as many times as individuals there are in a population, giving way to a new generation of indivuals. By preferentially combining individuals with high fitness, hopefully this new generation will have better solutions for our problem. For example, if one individual had a correct character in the first half of the string and another in the second half of the string, by combining them in the correct way we can obtain an individual with 2 correct characters. We could also obtain an individual with 0 correct characters in the strings. On a population level we expect the fitness to increase however. Besides, the creation of suboptimal individuals helps explore areas of the input domain, which given time can give way to better solutions.
 
 ```python
@@ -87,7 +110,7 @@ pop = [select(fitness) for _ in range(len(pop))]
 
 Here the population is obtained of entirely new individuals. However, other methodologies include the possibility of keeping a certain % of parents.
 
-Next comes the mutations. Notice how with crossover we can only obtain individuals whose values are combinations of the older generations. If the older generations where missing a certain value in a particular variable we could never obtain that value-variable combination this way. Imageine if for all individuals none had a k in the last letter. It would be impossible to get the correct answer! This problem could worsen as generations go by, because maybe higher fitness indic¡viduals who have more probability of getting picked share certain properties in the solution space. It is therefore neccessary to inject some variability into the mix, to generate new individuals with different, random properties. We do this in the mutation stage.
+Next comes the mutations. Notice how with crossover we can only obtain individuals whose values are combinations of the older generations. If the older generations where missing a certain value in a particular variable we could never obtain that value-variable combination this way. Imagine no individuals had a k in the last letter. It would be impossible to get the correct answer! This problem could worsen as generations go by, because maybe higher fitness individuals, who have more probability of getting picked, share certain properties in the solution space. It is therefore neccessary to inject some variability into the mix, to generate new individuals with different, random properties. We do this in the mutation stage.
 
 In mutation, we go through each individual. Each of its variables has a random probability _p_ of being mutated, here consisting of randomly replacing its value with one in its universe:
 
@@ -106,5 +129,5 @@ for i in range(len(individual)):
 We now repeat this process n number of items. At each iteration we compare that iterations best individual to our current one, changing them if necessary. Thatś all there is to it.
 
 
-# Todo: explain continuous GA
+# Continuous GA
 # Todo: Use cases
