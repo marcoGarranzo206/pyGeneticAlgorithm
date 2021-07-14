@@ -9,22 +9,24 @@ The user needs to define a fitness function to maximize which has to be positve 
 
 For discrete variables one can choose:
 
-p:probability of mutation
-pop: population size
-universe_type: "equal" or "specific" depending on whether each variable can take on the same values or each variable can take on different values
-universe: a 1d array or list of possible values each variable can take if universe is equal or a list of lists if specific. In the latter case, there must be as many lists as variables, each list indicating the values each variable can take
-crossover: midpoint or crossover
-parent contribution: which % of attributes to take from one parent
+**p**:probability of mutation
+**pop**: population size
+**universe_type**: "equal" or "specific" depending on whether each variable can take on the same values or each variable can take on different values
+**universe**: a 1d array or list of possible values each variable can take if universe is equal or a list of lists if specific. In the latter case, there must be as many lists as variables, each list indicating the values each variable can take
+**crossover**: midpoint or crossover
+**parent contribution**: which % of attributes to take from one parent
 
 Then, using the solve method, run the algorithm for n_iters of iterations.
 
 For continuous variables one can choose:
 
-p:probability of mutation
-pop: population size
-ub: vector of upper bounds for each variable. Size is the number of variables.
-lb: vector of lower bounds for each variable. Size is the number of variables.
+**p**:probability of mutation
+**pop**: population size
+**ub**: vector of upper bounds for each variable. Size is the number of variables.
+**lb**: vector of lower bounds for each variable. Size is the number of variables.
 
+## Example code
+### Explanation in Use cases
 
 # Discrete GA
 
@@ -131,3 +133,9 @@ We now repeat this process n number of items. At each iteration we compare that 
 
 # Continuous GA
 # Todo: Use cases
+
+# To do list
+
+Allow paralelization of fitness evaluations and crossover operations
+Numbafy discrete solver
+Allow mixed variables
