@@ -228,14 +228,14 @@ Mutation in a particular variable is done by uniformly choosing a number between
 
 In the use cases folder you will find examples of GA in more practical applications. These include:
 
-..* String guessing
-..* Feature selection in machine learning
-..* Finding communities in a network
-..* Finding the parameters of a system of ordinary differential equations
-..* Optimizing a complicated function with numba
+..* String guessing<br>
+..* Feature selection in machine learning<br>
+..* Finding communities in a network<br>
+..* Finding the parameters of a system of ordinary differential equations<br>
+..* Optimizing a complicated function with numba<br>
 
 # To do list
 
-Allow paralelization of fitness evaluations and crossover operations
-Numbafy discrete solver
-Allow mixed variables
+..* Allow paralelization of fitness evaluations and crossover operations<br>
+..* Numbafy discrete solver<br>
+..* Allow mixed variables<br>
