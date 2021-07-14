@@ -149,7 +149,7 @@ Next step comes the selection. Here, we choose which of our individuals are pick
 
 ```python
 prob = fitness/np.sum(pop_fitness)
-p1,p2 = np.random.choice(a = len(pop), p = prob), np.random.choice(a = len(self.pop), p = prob)
+p1,p2 = np.random.choice(a = len(pop), p = prob), np.random.choice(a = len(pop), p = prob)
 ```
 
 The crossover can be done in two ways, governing how a new individual (candidate solution) is generated. There are two methods:
