@@ -141,3 +141,4 @@ class discreteGeneticSolver:
 
                     self.pop[individual][i] = np.random.choice(self.universe)
                 else:
+                    self.pop[individual][i] = np.random.choice(self.universe[i])
