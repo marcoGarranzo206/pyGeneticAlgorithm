@@ -59,25 +59,25 @@ Midpoint:
     The first half of the new invidual contains the values of one parent, the next half of the other
     Instead of 50/50 we could establish any proportion we want:
     
-    ```python    
-    child = [0 for _ in range(23)]
-    proportion = 0.5
-    c = int(np.ceil(0.5*23))
-    child[:c] = p1[:c]
-    child[c:] = p2[c:]
-    crossover(self.pop[p1],self.pop[p2])
-    ```
+```python    
+child = [0 for _ in range(23)]
+proportion = 0.5
+c = int(np.ceil(0.5*23))
+child[:c] = p1[:c]
+child[c:] = p2[c:]
+crossover(self.pop[p1],self.pop[p2])
+```
     
 Crossover:
 
     Here, each variable has a probability _proportion_ to come from one parent or the other
-    ```python    
-    proportion = 0.5
-    child = [0 for _ in range(23)]
-    helper_parent = [p1,p2]
-    for i in range(23):
+```python    
+proportion = 0.5
+child = [0 for _ in range(23)]
+helper_parent = [p1,p2]
+for i in range(23):
 
-        child[i] = helper_parent[np.random.choice(a = 2, p = [proportion, 1 - proportion])][i] 
+    child[i] = helper_parent[np.random.choice(a = 2, p = [proportion, 1 - proportion])][i] 
     ```
 This process is repeated as many times as individuals there are in a population, giving way to a new generation of indivuals. By preferentially combining individuals with high fitness, hopefully this new generation will have better solutions for our problem. For example, if one individual had a correct character in the first half of the string and another in the second half of the string, by combining them in the correct way we can obtain an individual with 2 correct characters. We could also obtain an individual with 0 correct characters in the strings. On a population level we expect the fitness to increase however. Besides, the creation of suboptimal individuals helps explore areas of the input domain, which given time can give way to better solutions.
 
