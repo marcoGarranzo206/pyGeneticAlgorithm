@@ -103,7 +103,7 @@ def fitness(K):
     
     
 cgs = continuousGeneticSolver(0.01,fitness,[0,0],[10,10],1000)   # bounds of each param from 0 to 10
-    
+cgs.solve(600)
 ```
 
 # Discrete GA
@@ -151,10 +151,9 @@ Next step comes the selection. Here, we choose which of our individuals are pick
 ```python
 prob = fitness/np.sum(pop_fitness)
 p1,p2 = np.random.choice(a = len(pop), p = prob), np.random.choice(a = len(self.pop), p = prob)
-crossover(pop[p1],pop[p2])
 ```
 
-The crossover function governs how a new individual (candidate solution) is generated. There are two methods:
+The crossover can be done in two ways, governing how a new individual (candidate solution) is generated. There are two methods:
 
 Midpoint:
 
@@ -167,7 +166,6 @@ proportion = 0.5
 c = int(np.ceil(0.5*23))
 child[:c] = p1[:c]
 child[c:] = p2[c:]
-crossover(self.pop[p1],self.pop[p2])
 ```
     
 Crossover:
@@ -184,11 +182,7 @@ for i in range(23):
  
 This process is repeated as many times as individuals there are in a population, giving way to a new generation of indivuals. By preferentially combining individuals with high fitness, hopefully this new generation will have better solutions for our problem. For example, if one individual had a correct character in the first half of the string and another in the second half of the string, by combining them in the correct way we can obtain an individual with 2 correct characters. We could also obtain an individual with 0 correct characters in the strings. On a population level we expect the fitness to increase however. Besides, the creation of suboptimal individuals helps explore areas of the input domain, which given time can give way to better solutions.
 
-```python
-pop = [select(fitness) for _ in range(len(pop))]
-```
-
-Here the population is obtained of entirely new individuals. However, other methodologies include the possibility of keeping a certain % of parents.
+This way the new population is obtained of entirely new individuals. However, other methodologies include the possibility of keeping a certain % of parents.
 
 Next comes the mutations. Notice how with crossover we can only obtain individuals whose values are combinations of the older generations. If the older generations where missing a certain value in a particular variable we could never obtain that value-variable combination this way. Imagine no individuals had a k in the last letter. It would be impossible to get the correct answer! This problem could worsen as generations go by, because maybe higher fitness individuals, who have more probability of getting picked, share certain properties in the solution space. It is therefore neccessary to inject some variability into the mix, to generate new individuals with different, random properties. We do this in the mutation stage.
 
@@ -196,7 +190,7 @@ In mutation, we go through each individual. Each of its variables has a random p
 
 ```python
 p = 0.01
-for i in range(len(individual)):
+for i in range(len(pop)):
 
     for j in range(len(pop[i])):
 
@@ -210,7 +204,36 @@ We now repeat this process n number of items. At each iteration we compare that 
 
 
 # Continuous GA
-# Todo: Use cases
+
+When your variables are continuous within a range of values the process is very similar but some things need to be adjusted.
+
+Ypu will need to define the upper and lower bounds of each variable. This is done with 2 arrays of size n, where n is the number of variables.
+
+Like in the discrete case, a fitness function is neccesary. Selection is the same. The differences come in crossover
+
+## crossover in continuous GA
+
+Crossover is done by randomly interpolating each variable between the parents. That is, for each variable a number _mix_ between 0 and 1 is randomly chosen. Two children are produced, and the two parents are returned. Mating is done therefore pop_size/4 times (since each time you will get 4 individuals: 2 parents and two children), so it is imperative that pop_size be divisible by 4. Once again there are different ways to go about doing this, this is just my implementation.
+```python
+# p1 and p2 are the two parents chosen for mating
+l = len(p1)
+child1 = [0 for _ in range(l)]
+child2 = [0 for _ in range(l)]
+mix = np.random.uniform(size= l)
+child1 = [m*p_1 + (1-m)*p_2 for m,p_1,p_2 in zip(mix,p1,p2)]
+child2 = [m*p_2 + (1-m)*p_1 for m,p_1,p_2 in zip(mix,p1,p2)]
+```
+Mutation in a particular variable is done by uniformly choosing a number between its range. Other implementations include adding gaussian random variable to current value, but I prefer the uniform method since it encourages more exploration.
+
+# Use cases. To do: add jupyter notebooks
+
+In the use cases folder you will find examples of GA in more practical applications. These include:
+
+..* String guessing
+..* Feature selection in machine learning
+..* Finding communities in a network
+..* Finding the parameters of a system of ordinary differential equations
+..* Optimizing a complicated function with numba
 
 # To do list
 
