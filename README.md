@@ -46,7 +46,6 @@ ans = dGS.solve(600)
 
 ```python
 from pygenetic_algorithm.discrete_solver import discreteGeneticSolver
-from string import ascii_lowercase
 import networkx as nx
 
 #Network clustering 
