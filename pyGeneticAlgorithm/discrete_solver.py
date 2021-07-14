@@ -127,7 +127,7 @@ class discreteGeneticSolver:
             helper_parent = [p1,p2]
             for i in range(l):
 
-                child[i] = helper_parent[np.random.choice(a = 2, p = [c, 1 - c])][i] 
+                child[i] = helper_parent[np.random.choice(a = 2, p = [self.parent_contribution, 1 - self.parent_contribution])][i] 
         return child
 
 
