@@ -15,7 +15,7 @@ For discrete variables one can choose:
 **universe**: a 1d array or list of possible values each variable can take if universe is equal or a list of lists if specific. In the latter case, there must be as many lists as variables, each list indicating the values each variable can take<br>
 **crossover**: midpoint or crossover<br>
 **parent contribution**: which % of attributes to take from one parent<br>
-
+**length**: number of variables 
 Then, using the solve method, run the algorithm for n_iters of iterations.
 
 For continuous variables one can choose:
@@ -27,6 +27,84 @@ For continuous variables one can choose:
 
 ## Example code
 Explanation in Use cases
+
+```python
+from pygenetic_algorithm.discrete_solver import discreteGeneticSolver
+from string import ascii_lowercase
+
+#Lets try to have the GA guess some string
+stringToFind = "genetic algorithms rock"
+universe = list(ascii_lowercase) + " "
+
+def fitness(S):
+    
+    return sum([ s1 == s2 for (s1,s2) in zip(stringToFind,S) ])
+    
+dGS = discreteGeneticSolver(0.01,"midpoint",universe = universe,length = len(stringToFind),fitness = fitness)
+ans = dGS.solve(600)
+```
+
+```python
+from pygenetic_algorithm.discrete_solver import discreteGeneticSolver
+from string import ascii_lowercase
+import networkx as nx
+
+#Network clustering 
+
+def modularity(node_assingments):
+    
+    Q = 0
+    m = 2*G.order()
+    
+    for u in G:
+        
+        for v in G:
+            
+            if u != v and node_assingments[u] == node_assingments[v]:
+                
+                Q += G.has_edge(u,v) - G.degree(u)*G.degree(v)/(m)
+                
+    return (1 + Q/m) # Q/m between -1 and 1
+    
+universe = [ list(min(i)) for i in range(1,len(G)+1)]  # the first node can belong to cluster 0 only, the second can belong to that cluster or its own and so on
+
+dsG = discreteGeneticSolver(0.01,"midpoint",universe, len(universe),modularity, 10000,universe_type="specific")
+ans = dGS.solve(600)
+```
+
+```python
+from pygenetic_algorithm.continuous_solver import continuousGeneticSolver
+#Lets try to have the GA the parameters of a system of ordinary differential equations
+#here k1 and k2
+
+from scipy.integrate import odeint
+import numpy as np
+
+def diffeq(ABC,t,k1,k2):
+    
+    A,B,C = ABC
+    dA = -k1*A**2
+    dB = k1*A**2 - k2*B
+    dC = k2*B
+    return [dA,dB,dC]
+
+ABC0 = [100,0,0]
+t = np.linspace(0,250,101)
+
+true_k1 = 0.01
+true_k2 = 0.1
+observed = odeint(diffeq, ABC0, t, args=(true_k1, true_k2))
+  
+def fitness(K):
+    k1,k2 = K
+    ABC0 = [100,0,0]
+    sol = odeint(diffeq, ABC0, t, args=(k1, k2))
+    return (1/np.linalg.norm(sol - observed))
+    
+    
+cgs = continuousGeneticSolver(0.01,fitness,[0,0],[10,10],1000)   # bounds of each param from 0 to 10
+    
+```
 
 # Discrete GA
 
