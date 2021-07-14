@@ -1,27 +1,18 @@
 # pyGeneticAlgorithm
 Genetic algorithms (GA) for discrete and continuous functions in python
 
-In this repository I code from scratch genetic algorithms in python and provide a few use cases. Any suggestions for improving the algorithm or optimizating the procedure or ideas for use cases are appreciated. At the moment it is just a side project but I am always looking to improve my work.
+In this repository I implement genetic algorithms in python and provide a few use cases. Any suggestions for improving the algorithm or optimizating the procedure or ideas for use cases are appreciated. At the moment it is just a side project but I am always looking to improve my work.
 
 
-# Todo: explain discrete GA
+# Discrete GA
 
 Genetic algorithms randomly search solutions to a given optimization problem drawing inspiration from biology. They try to imitate natural selection in order to evolve a population of solutions to search for better solutions to the problem. Given enough time (though for large problems you probably will not have enough) they can find the global optimum of a function.
 
-The first thing you will need is to define a function to optimize, the so called fitness function.
+The first thing you will need is to define a function to optimize, the so called fitness function. This function takes in an array of values, each position representing a decision variable that can take on a discrete set of values, and returns a positive number.
 
-Imagine you want an algorithm to guess a string, such as "genetic algorithms rock". A pretty contrived example, taken from XXX, but I think is very intuitive. Later we will use GA for more useful problems such as feature selection in machine learning and community detection in networks. 
+Imagine you want an algorithm to guess a string, such as "genetic algorithms rock". A pretty contrived example, taken from XXX, but I think is very intuitive. Don't worry, later we will use GA for more useful problems such as feature selection in machine learning and community detection in networks. 
 
-Anyways, imagine that the algorithm knows the length of the string (23 characters), and all it has to do is search for which characters to put in each position. Given a string S, we can judge how close this string is to our target string (and therefore judge the *fitness* of it) using a hamming similarity.
-
-```python
-def hamming_similarity(S1, S2):
-    
-    return sum([ s1 == s2 for (s1,s2) in zip(S1,S2) ])
-```
-
-What this function does is count the number of characters that two strings, S1 and S2, have in common. The max value it can take is the length of both strings.
-If we want a GA to guess the string "genetic algorithms rock", we fix S1 to be that string, and let S2 be candidate solution S:
+Anyways, imagine that the algorithm knows the length of the string (23 characters), and all it has to do is search for which characters to put in each position. We must then define a function which takes as an argument a string (or array of characters) and judges how close this string is to our target string (and therefore judge the *fitness* of it) using the hamming similarity.
 
 ```python
 stringToFind = "genetic algorithms rock"
@@ -30,16 +21,89 @@ def fitness(S):
     
     return sum([ s1 == s2 for (s1,s2) in zip(stringToFind,S) ])
 ```
-We therefore have a function that takes in an iterable (a string, an array...) and spits out a positive number.
-We define a candidate solution for any fitness function as an individual, which is nothing more than an n-dimensional array, where n is the number of decision  variables. Here n is 23, with n[0] being the value of the first letter and so on. In the case of discrete GA such as this one, decision variables can take on any number of discrete possible values. In principle any variable could have a different set of possible values, but here each variable will be able to take the same values: all ascii lowercase letters and a space. We define the universe as the values each decision variable can take
+
+What this function does is count the number of characters that two strings, S and stringToFind, have in common. The max value it can take is the length of the strings.
+
+
+We define a candidate solution (here called _S_) for any fitness function as an individual, which is nothing more than an n-dimensional array, where n is the number of decision  variables. Here n is 23, with n[0] being the value of the first letter and so on. 
+
+In the case of discrete GA such as this one, decision variables can take on any number of discrete possible values. In principle any variable could have a different set of possible values, but here each variable will be able to take the same values: all ascii lowercase letters and a space. We define the universe as the values each decision variable can take
 
 ```python
 from string import ascii_lowercase
 universe = list(ascii_lowercase) + " "
 ```
 
-Our genetic algorithm will now randomly initialize a number of individuals, say, a 100. They will probably be very far off from the target string, but due to chance, some will be better than others, as judged by out fitness score.
+Our genetic algorithm will now randomly initialize a number of individuals, say, a 100. We will evaluate each individualś fitness, which can be done in parallel. They will probably be very far off from the target string, but due to chance, some will be better than others, as judged by out fitness score.
 
+```python
+import numpy as np
+n_pop = 100
+length = 23
+pop = [np.random.choice(universe, length) for _ in range(n_pop)]
+pop_fitness = np.array([fitness(x) for x in pop])
+```
+
+Next step comes the selection. Here, we choose which of our individuals are picked to "reproduce" for the next generation. The probability of being picked is proportional to their fitness (which is why it is important for it to be a positive value). In our example, a string with 10 characters in common with our target is 5 times more likely to be picked than a string with 2 characters in common. Reproduction occurs in pairs, that is, we must choose 2 individuals to reproduce in order to generate a new individual (that is, a new solution to our function) through a process called crossover:
+
+```python
+prob = fitness/np.sum(pop_fitness)
+p1,p2 = np.random.choice(a = len(pop), p = prob), np.random.choice(a = len(self.pop), p = prob)
+crossover(self.pop[p1],self.pop[p2])
+```
+
+The crossover function governs how a new individual (candidate solution) is generated. There are two methods:
+
+Midpoint:
+
+    The first half of the new invidual contains the values of one parent, the next half of the other
+    Instead of 50/50 we could establish any proportion we want:
+    
+    ```python    
+    child = [0 for _ in range(23)]
+    proportion = 0.5
+    c = int(np.ceil(0.5*23))
+    child[:c] = p1[:c]
+    child[c:] = p2[c:]
+    crossover(self.pop[p1],self.pop[p2])
+    ```
+    
+Crossover:
+
+    Here, each variable has a probability _proportion_ to come from one parent or the other
+    ```python    
+    proportion = 0.5
+    child = [0 for _ in range(23)]
+    helper_parent = [p1,p2]
+    for i in range(23):
+
+        child[i] = helper_parent[np.random.choice(a = 2, p = [proportion, 1 - proportion])][i] 
+    ```
+This process is repeated as many times as individuals there are in a population, giving way to a new generation of indivuals. By preferentially combining individuals with high fitness, hopefully this new generation will have better solutions for our problem. For example, if one individual had a correct character in the first half of the string and another in the second half of the string, by combining them in the correct way we can obtain an individual with 2 correct characters. We could also obtain an individual with 0 correct characters in the strings. On a population level we expect the fitness to increase however. Besides, the creation of suboptimal individuals helps explore areas of the input domain, which given time can give way to better solutions.
+
+```python
+pop = [select(fitness) for _ in range(len(pop))]
+```
+
+Here the population is obtained of entirely new individuals. However, other methodologies include the possibility of keeping a certain % of parents.
+
+Next comes the mutations. Notice how with crossover we can only obtain individuals whose values are combinations of the older generations. If the older generations where missing a certain value in a particular variable we could never obtain that value-variable combination this way. Imageine if for all individuals none had a k in the last letter. It would be impossible to get the correct answer! This problem could worsen as generations go by, because maybe higher fitness indic¡viduals who have more probability of getting picked share certain properties in the solution space. It is therefore neccessary to inject some variability into the mix, to generate new individuals with different, random properties. We do this in the mutation stage.
+
+In mutation, we go through each individual. Each of its variables has a random probability _p_ of being mutated, here consisting of randomly replacing its value with one in its universe:
+
+```python
+p = 0.01
+for i in range(len(individual)):
+
+    for j in range(len(pop[i])):
+
+        if np.random.random() < p:
+
+            pop[i][j] = np.random.choice(universe)
+     
+```
+
+We now repeat this process n number of items. At each iteration we compare that iterations best individual to our current one, changing them if necessary. Thatś all there is to it.
 
 
 # Todo: explain continuous GA
