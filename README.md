@@ -239,3 +239,4 @@ In the use cases folder you will find examples of GA in more practical applicati
 * Allow paralelization of fitness evaluations and crossover operations<br>
 * Numbafy discrete solver<br>
 * Allow mixed variables<br>
+* Fix latex in use cases <br>
