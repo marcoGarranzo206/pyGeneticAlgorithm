@@ -65,7 +65,7 @@ def modularity(node_assingments):
                 
     return (1 + Q/m) # Q/m between -1 and 1
     
-universe = [ list(min(i)) for i in range(1,len(G)+1)]  # the first node can belong to cluster 0 only, the second can belong to that cluster or its own and so on
+universe = [ list(range(i)) for i in range(1,len(G)+1)]  # the first node can belong to cluster 0 only, the second can belong to that cluster or its own and so on
 
 dsG = discreteGeneticSolver(0.01,"midpoint",universe, len(universe),modularity, 10000,universe_type="specific")
 ans = dGS.solve(600)
