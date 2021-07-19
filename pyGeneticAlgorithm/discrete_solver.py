@@ -25,7 +25,7 @@ class discreteGeneticSolver:
         for the moment, two choices:
             midpoint: select a point. All decisions variables with index up until that point is inherited
             from one parent, and the others from the other parent
-            crossover: each decision has a probability to be inherited from one parent or the other
+            uniform: each decision has a probability to be inherited from one parent or the other
             
         parent_contribution: mating happens randomly between p1 and p2. It is the % of DNA
         you want from parent 1.
@@ -122,7 +122,7 @@ class discreteGeneticSolver:
             child[:c] = p1[:c]
             child[c:] = p2[c:]
 
-        elif self.crossover_method == "crossover":
+        elif self.crossover_method == "uniform":
 
             helper_parent = [p1,p2]
             for i in range(l):
