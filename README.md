@@ -158,8 +158,8 @@ The crossover can be done in two ways, governing how a new individual (candidate
 
 Midpoint:
 
-The first half of the new invidual contains the values of one parent, the next half of the other
-Instead of 50/50 we could establish any proportion we want:
+* The first half of the new invidual contains the values of one parent, the next half of the other
+* Instead of 50/50 we could establish any proportion we want:
     
 ```python    
 child = [0 for _ in range(23)]
@@ -171,7 +171,7 @@ child[c:] = p2[c:]
     
 Uniform:
 
-Here, each variable has a probability _proportion_ to come from one parent or the other
+* Here, each variable has a probability _proportion_ to come from one parent or the other
 ```python    
 proportion = 0.5
 child = [0 for _ in range(23)]
