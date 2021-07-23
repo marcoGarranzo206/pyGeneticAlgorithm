@@ -43,6 +43,10 @@ class discreteGeneticSolver:
         self.fitness = fitness
         self.parent_contribution = parent_contribution
         
+        if crossover_method not in ("midpoint", "uniform"):
+
+            raise ValueError(f"crossover_method must be midpoint or uniform, not {crossover_method}")
+        
         if universe_type not in ("equal", "specific"):
 
             raise ValueError(f"universe_type must be equal or specific, not {universe_type}")
@@ -85,7 +89,11 @@ class discreteGeneticSolver:
 
             if verbose:
 
-                print(fitness[max_i])
+                max_fitness_j = fitness[max_i]
+                mean_fitness_j = np.mean(fitness)
+                print(f"Max fitness in iteration number {j} : {max_fitness_j}")
+                print(f"Mean fitness in iteration number {j} : {mean_fitness_j}")
+                
             self.pop = [self.select(fitness) for _ in range(len(self.pop))]
 
             for i in range(len(self.pop)):
