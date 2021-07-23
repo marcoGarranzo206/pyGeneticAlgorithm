@@ -60,10 +60,11 @@ class continuousGeneticSolver:
 
             if verbose:
 
-                print(max_response)
-                print(len(self.pop))
-                print(max_fitness)
-                print("...")
+                max_fitness_j = fitness[max_i]
+                mean_fitness_j = np.mean(fitness)
+                print(f"Max fitness in iteration number {j} : {max_fitness_j}")
+                print(f"Mean fitness in iteration number {j} : {mean_fitness_j}")
+                
             self.pop = [ individual for _ in range(len(self.pop)//4 ) for individual in self.select(fitness)]
             
             for i in range(len(self.pop)):
