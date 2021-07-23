@@ -16,7 +16,7 @@ For discrete variables the following parameters are available:
 **crossover**: midpoint or uniform<br>
 **parent contribution**: which % of attributes to take from one parent<br>
 **length**: number of variables 
-Then, using the solve method, run the algorithm for n_iters of iterations.
+Then, using the solve method, run the algorithm for n_iters of iterations. A verbose option is available.
 
 For continuous variables one can choose:
 
